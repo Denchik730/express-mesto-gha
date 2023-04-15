@@ -1,4 +1,4 @@
-const {User} = require('../models/user');
+const { User } = require('../models/user');
 
 const createUser = (req, res) => {
   const { name, about, avatar } = req.body;
@@ -17,6 +17,14 @@ const getUser = (req, res) => {
   User.findById(req.params.userId)
     .then((user) => res.send({ data: user }))
     .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
+};
+
+const updateProfile = (req, res) => {
+
+};
+
+const updateAvatar = (req, res) => {
+
 };
 
 module.exports = { createUser, getUsers, getUser };
