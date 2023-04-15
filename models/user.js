@@ -17,6 +17,10 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+}, {
+  versionKey: false // You should be aware of the outcome after set to false
 });
 
-module.exports = mongoose.model('user', userSchema);
+const User = mongoose.model('user', userSchema);
+
+module.exports = { User };
