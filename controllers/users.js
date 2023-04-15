@@ -20,7 +20,10 @@ const getUser = (req, res) => {
 };
 
 const updateProfile = (req, res) => {
-
+  const { name, about } = req.body;
+  User.findByIdAndUpdate(req.user._id, { name, about })
+    .then(user => res.send({ data: user }))
+    .catch(err => res.status(500).send({ message: 'Произошла ошибка' }));
 };
 
 const updateAvatar = (req, res) => {
@@ -30,4 +33,4 @@ const updateAvatar = (req, res) => {
     .catch(err => res.status(500).send({ message: 'Произошла ошибка' }));
 };
 
-module.exports = { createUser, getUsers, getUser, updateAvatar };
+module.exports = { createUser, getUsers, getUser, updateAvatar, updateProfile };
