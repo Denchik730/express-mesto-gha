@@ -27,6 +27,12 @@ const cardSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+}, {
+  versionKey: false // You should be aware of the outcome after set to false
 });
 
-module.exports = mongoose.model('card', cardSchema);
+const Card = mongoose.model('card', cardSchema);
+
+module.exports = {
+  Card
+}

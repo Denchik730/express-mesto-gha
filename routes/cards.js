@@ -7,8 +7,8 @@ router.get('/', getCards);
 
 router.delete('/:cardId', deleteCard);
 
-router.patch('/:cardId/likes', likeCard);
+router.put('/:cardId/likes', likeCard);
 
-router.patch('/:cardId/likes', dislikeCard);
+router.delete('/:cardId/likes', dislikeCard);
 
 module.exports = router;
