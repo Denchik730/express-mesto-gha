@@ -13,10 +13,9 @@ const createUser = async (req, res, next) => {
   } catch (err) {
     if (err.name === 'ValidationError') {
       next(new ValidationError('Переданы некорректные данные'));
-      return;
+    } else {
+      next(err);
     }
-
-    next(err);
   }
 };
 
@@ -42,10 +41,9 @@ const getUser = async (req, res, next) => {
   } catch (err) {
     if (err.name === 'CastError') {
       next(new CastError('Переданы некорректные данные'));
-      return;
+    } else {
+      next(err);
     }
-
-    next(err);
   }
 };
 
@@ -66,10 +64,9 @@ const updateProfile = async (req, res, next) => {
   } catch (err) {
     if (err.name === 'ValidationError') {
       next(new ValidationError('Переданы некорректные данные'));
-      return;
+    } else {
+      next(err);
     }
-
-    next(err);
   }
 };
 
@@ -90,10 +87,9 @@ const updateAvatar = async (req, res, next) => {
   } catch (err) {
     if (err.name === 'ValidationError') {
       next(new ValidationError('Переданы некорректные данные'));
-      return;
+    } else {
+      next(err);
     }
-
-    next(err);
   }
 };
 

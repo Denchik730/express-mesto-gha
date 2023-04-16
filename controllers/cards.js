@@ -14,10 +14,9 @@ const createCard = async (req, res, next) => {
   } catch (err) {
     if (err.name === 'ValidationError') {
       next(new ValidationError('Переданы некорректные данные'));
-      return;
+    } else {
+      next(err);
     }
-
-    next(err);
   }
 };
 
@@ -43,10 +42,9 @@ const deleteCard = async (req, res, next) => {
   } catch (err) {
     if (err.name === 'CastError') {
       next(new CastError('Переданы некорректные данные'));
-      return;
+    } else {
+      next(err);
     }
-
-    next(err);
   }
 };
 
@@ -66,10 +64,9 @@ const likeCard = async (req, res, next) => {
   } catch (err) {
     if (err.name === 'CastError') {
       next(new CastError('Переданы некорректные данные'));
-      return;
+    } else {
+      next(err);
     }
-
-    next(err);
   }
 };
 
@@ -89,10 +86,9 @@ const dislikeCard = async (req, res, next) => {
   } catch (err) {
     if (err.name === 'CastError') {
       next(new CastError('Переданы некорректные данные'));
-      return;
+    } else {
+      next(err);
     }
-
-    next(err);
   }
 };
 
