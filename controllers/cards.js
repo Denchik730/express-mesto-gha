@@ -1,45 +1,118 @@
 const { Card } = require('../models/card');
+const { ValidationError } = require('../errors/ValidationError');
+const { NotFoundError } = require('../errors/NotFoundError');
 
-const createCard = (req, res) => {
+const createCard = async (req, res, next) => {
+  try {
 
-  const { name, link } = req.body;
-  const owner = req.user._id
+    const { name, link } = req.body;
+    const owner = req.user._id
 
-  Card.create({ name, link, owner })
-    .then((card) => res.send({ data: card }))
-    .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
+    const card = await Card.create({ name, link, owner });
+
+    res.send(card);
+
+  } catch(err) {
+
+    if (err.name === 'ValidationError') {
+
+      next(new ValidationError('Переданы некорректные данные'));
+      return;
+
+    }
+
+    next(err);
+  }
 };
 
-const getCards = (req, res) => {
-  Card.find({})
-    .then((cards) => res.send({ data: cards }))
-    .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
+const getCards = async (req, res, next) => {
+  try {
+
+    const cards = await Card.find({})
+
+    res.send(cards);
+
+  } catch(err) {
+
+    next(err)
+
+  }
 };
 
-const deleteCard = (req, res) => {
-  Card.findByIdAndRemove(req.params.cardId)
-    .then((card) => res.send({ data: card }))
-    .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
+const deleteCard = async (req, res, next) => {
+  try {
+
+    const card = await Card.findByIdAndRemove(req.params.cardId);
+
+    if (!card) {
+      throw new NotFoundError('Запрашиваемая карточка не найдена');
+    }
+
+    res.send(card);
+
+  } catch(err) {
+
+    next(err);
+
+  }
 };
 
-const likeCard = (req, res) => {
-  Card.findByIdAndUpdate(
-    req.params.cardId,
-    { $addToSet: { likes: req.user._id } },
-    { new: true },
-  )
-  .then(card => res.send({ data: card }))
-  .catch(err => res.status(500).send({ message: 'Произошла ошибка' }));
+const likeCard = async (req, res, next) => {
+  try {
+
+    const card = await Card.findByIdAndUpdate(
+      req.params.cardId,
+      { $addToSet: { likes: req.user._id } },
+      { new: true },
+    )
+
+    if (!card) {
+      throw new NotFoundError('Запрашиваемая карточка не найдена');
+    }
+
+    res.send(card);
+
+  } catch(err) {
+
+    if (err.name === 'ValidationError') {
+
+      next(new ValidationError('Переданы некорректные данные'));
+      return;
+
+    }
+
+    next(err);
+
+  }
 };
 
-const dislikeCard = (req, res) => {
-  Card.findByIdAndUpdate(
-    req.params.cardId,
-    { $pull: { likes: req.user._id } },
-    { new: true },
-  )
-  .then(card => res.send({ data: card }))
-  .catch(err => res.status(500).send({ message: 'Произошла ошибка' }));
+const dislikeCard = async (req, res, next) => {
+  try {
+
+    const card = await Card.findByIdAndUpdate(
+      req.params.cardId,
+      { $pull: { likes: req.user._id } },
+      { new: true },
+    )
+
+    if (!card) {
+      throw new NotFoundError('Запрашиваемая карточка не найдена');
+    }
+
+    res.send(card);
+
+  } catch(err) {
+
+    if (err.name === 'ValidationError') {
+
+      next(new ValidationError('Переданы некорректные данные'));
+      return;
+
+    }
+
+    next(err);
+
+  }
 };
 
 module.exports = { createCard, getCards, deleteCard, likeCard, dislikeCard };

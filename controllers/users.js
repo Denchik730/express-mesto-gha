@@ -51,7 +51,7 @@ const getUser = async (req, res, next) => {
 
     if (err.name === 'CastError') {
 
-      next(new NotFoundError('Пользователь с данным _id не найден'));
+      next(new NotFoundError('Запрашиваемый пользователь не найден'));
       return;
 
     }
@@ -65,17 +65,25 @@ const updateProfile = async (req, res, next) => {
 
     const { name, about } = req.body;
 
-    const user = await User.findByIdAndUpdate('req.user._id', { name, about });
+    const user = await User.findByIdAndUpdate(req.user._id, { name, about });
 
     if (!user) {
-      throw new NotFoundError('Пользователь с данным _id не найден');
+      throw new NotFoundError('Запрашиваемый пользователь не найден');
     }
 
     res.send(user);
 
   } catch(err) {
 
+    if (err.name === 'ValidationError') {
+
+      next(new ValidationError('Переданы некорректные данные'));
+      return;
+
+    }
+
     next(err);
+
   }
 };
 
@@ -84,15 +92,22 @@ const updateAvatar = async (req, res, next) => {
 
     const { avatar } = req.body;
 
-    const user = await User.findByIdAndUpdate('req.user._id', { avatar });
+    const user = await User.findByIdAndUpdate(req.user._id, { avatar });
 
     if (!user) {
-      throw new NotFoundError('Пользователь с данным _id не найден');
+      throw new NotFoundError('Запрашиваемый пользователь не найден');
     }
 
     res.send(user);
 
   } catch(err) {
+
+    if (err.name === 'ValidationError') {
+
+      next(new ValidationError('Переданы некорректные данные'));
+      return;
+
+    }
 
     next(err);
 
