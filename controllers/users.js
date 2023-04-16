@@ -4,65 +4,48 @@ const { NotFoundError } = require('../errors/NotFoundError');
 
 const createUser = async (req, res, next) => {
   try {
-
     const { name, about, avatar } = req.body;
 
     const user = await User.create({ name, about, avatar });
 
     res.send(user);
-
-  } catch(err) {
-
+  } catch (err) {
     if (err.name === 'ValidationError') {
-
       next(new ValidationError('Переданы некорректные данные'));
       return;
-
     }
 
     next(err);
   }
 };
 
-
 const getUsers = async (req, res, next) => {
   try {
-
     const users = await User.find({});
 
     res.send(users);
-
-  } catch(err) {
-
-    next(err)
-
+  } catch (err) {
+    next(err);
   }
 };
 
-
 const getUser = async (req, res, next) => {
   try {
-
     const user = await User.findById(req.params.userId);
 
     res.send(user);
-
-  } catch(err) {
-
+  } catch (err) {
     if (err.name === 'CastError') {
-
       next(new NotFoundError('Запрашиваемый пользователь не найден'));
       return;
-
     }
 
-    next(err)
+    next(err);
   }
 };
 
 const updateProfile = async (req, res, next) => {
   try {
-
     const { name, about } = req.body;
 
     const user = await User.findByIdAndUpdate(req.user._id, { name, about });
@@ -72,24 +55,18 @@ const updateProfile = async (req, res, next) => {
     }
 
     res.send(user);
-
-  } catch(err) {
-
+  } catch (err) {
     if (err.name === 'ValidationError') {
-
       next(new ValidationError('Переданы некорректные данные'));
       return;
-
     }
 
     next(err);
-
   }
 };
 
 const updateAvatar = async (req, res, next) => {
   try {
-
     const { avatar } = req.body;
 
     const user = await User.findByIdAndUpdate(req.user._id, { avatar });
@@ -99,20 +76,20 @@ const updateAvatar = async (req, res, next) => {
     }
 
     res.send(user);
-
-  } catch(err) {
-
+  } catch (err) {
     if (err.name === 'ValidationError') {
-
       next(new ValidationError('Переданы некорректные данные'));
       return;
-
     }
 
     next(err);
-
   }
 };
 
-
-module.exports = { createUser, getUsers, getUser, updateAvatar, updateProfile };
+module.exports = {
+  createUser,
+  getUsers,
+  getUser,
+  updateAvatar,
+  updateProfile,
+};

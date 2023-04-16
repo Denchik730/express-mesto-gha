@@ -28,11 +28,11 @@ const cardSchema = new mongoose.Schema({
     default: Date.now,
   },
 }, {
-  versionKey: false // You should be aware of the outcome after set to false
+  versionKey: false,
 });
 
 const Card = mongoose.model('card', cardSchema);
 
 module.exports = {
-  Card
-}
+  Card,
+};
