@@ -18,7 +18,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use((req, res, next) => {
   req.user = {
-    _id: '643b92472855dee40b7a2021'
+    _id: '643b92472855dee40b7a2021',
   };
 
   next();
