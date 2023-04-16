@@ -1,36 +1,103 @@
 const { User } = require('../models/user');
+const { ValidationError } = require('../errors/ValidationError');
+const { NotFoundError } = require('../errors/NotFoundError');
 
-const createUser = (req, res) => {
-  const { name, about, avatar } = req.body;
-  User.create({ name, about, avatar })
-    .then((user) => res.send({ data: user }))
-    .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
+const createUser = async (req, res, next) => {
+  try {
+
+    const { name, about, avatar } = req.body;
+
+    const user = await User.create({ name, about, avatar });
+
+    res.send(user);
+
+  } catch(err) {
+
+    if (err.name === 'ValidationError') {
+
+      next(new ValidationError('Переданы некорректные данные'));
+      return;
+
+    }
+
+    next(err);
+  }
 };
 
-const getUsers = (req, res) => {
-  User.find({})
-    .then((users) => res.send({ data: users }))
-    .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
+
+const getUsers = async (req, res, next) => {
+  try {
+
+    const users = await User.find({});
+
+    res.send(users);
+
+  } catch(err) {
+
+    next(err)
+
+  }
 };
 
-const getUser = (req, res) => {
-  User.findById(req.params.userId)
-    .then((user) => res.send({ data: user }))
-    .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
+
+const getUser = async (req, res, next) => {
+  try {
+
+    const user = await User.findById(req.params.userId);
+
+    res.send(user);
+
+  } catch(err) {
+
+    if (err.name === 'CastError') {
+
+      next(new NotFoundError('Пользователь с данным _id не найден'));
+      return;
+
+    }
+
+    next(err)
+  }
 };
 
-const updateProfile = (req, res) => {
-  const { name, about } = req.body;
-  User.findByIdAndUpdate(req.user._id, { name, about })
-    .then(user => res.send({ data: user }))
-    .catch(err => res.status(500).send({ message: 'Произошла ошибка' }));
+const updateProfile = async (req, res, next) => {
+  try {
+
+    const { name, about } = req.body;
+
+    const user = await User.findByIdAndUpdate('req.user._id', { name, about });
+
+    if (!user) {
+      throw new NotFoundError('Пользователь с данным _id не найден');
+    }
+
+    res.send(user);
+
+  } catch(err) {
+
+    next(err);
+  }
 };
 
-const updateAvatar = (req, res) => {
-  const { avatar } = req.body;
-  User.findByIdAndUpdate(req.user._id, { avatar })
-    .then(user => res.send({ data: user }))
-    .catch(err => res.status(500).send({ message: 'Произошла ошибка' }));
+const updateAvatar = async (req, res, next) => {
+  try {
+
+    const { avatar } = req.body;
+
+    const user = await User.findByIdAndUpdate('req.user._id', { avatar });
+
+    if (!user) {
+      throw new NotFoundError('Пользователь с данным _id не найден');
+    }
+
+    res.send(user);
+
+  } catch(err) {
+
+    next(err);
+
+  }
 };
+
 
 module.exports = { createUser, getUsers, getUser, updateAvatar, updateProfile };

@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const routerUsers = require('./routes/users');
 const router = require('./routes/cards');
+const errorHandler = require('./errors/errorHandler');
 
 const { PORT = 3000 } = process.env;
 
@@ -17,7 +18,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use((req, res, next) => {
   req.user = {
-    _id: '643a4c5b987b6c43ecd9539d'
+    _id: '643b92472855dee40b7a2021'
   };
 
   next();
@@ -25,6 +26,8 @@ app.use((req, res, next) => {
 
 app.use('/users', routerUsers);
 app.use('/cards', router);
+
+app.use(errorHandler);
 
 app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`);
