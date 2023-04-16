@@ -2,8 +2,9 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const routerUsers = require('./routes/users');
-const router = require('./routes/cards');
+const routerCard = require('./routes/cards');
 const errorHandler = require('./errors/errorHandler');
+const { NotFoundError } = require('./errors/NotFoundError');
 
 const { PORT = 3000 } = process.env;
 
@@ -25,7 +26,11 @@ app.use((req, res, next) => {
 });
 
 app.use('/users', routerUsers);
-app.use('/cards', router);
+app.use('/cards', routerCard);
+
+app.all('*', (req, res, next) => {
+  next(new NotFoundError('Неверный адрес запроса'));
+});
 
 app.use(errorHandler);
 
