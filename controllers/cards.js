@@ -15,7 +15,7 @@ const createCard = async (req, res, next) => {
     res.status(CREATED_CARD_CODE).send(card);
   } catch (err) {
     if (err.name === 'ValidationError') {
-      next(new ValidationError('Переданы некорректные данные'));
+      next(new ValidationError(err.message));
     } else {
       next(err);
     }
