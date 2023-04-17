@@ -1,3 +1,5 @@
+const CREATED_USER_CODE = 201;
+
 const { User } = require('../models/user');
 const { ValidationError } = require('../errors/ValidationError');
 const { NotFoundError } = require('../errors/NotFoundError');
@@ -9,7 +11,7 @@ const createUser = async (req, res, next) => {
 
     const user = await User.create({ name, about, avatar });
 
-    res.send(user);
+    res.status(CREATED_USER_CODE).send(user);
   } catch (err) {
     if (err.name === 'ValidationError') {
       next(new ValidationError('Переданы некорректные данные'));
@@ -64,6 +66,8 @@ const updateProfile = async (req, res, next) => {
   } catch (err) {
     if (err.name === 'ValidationError') {
       next(new ValidationError('Переданы некорректные данные'));
+    } else if (err.name === 'CastError') {
+      next(new CastError('Переданы некорректные данные'));
     } else {
       next(err);
     }

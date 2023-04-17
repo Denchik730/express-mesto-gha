@@ -1,3 +1,5 @@
+const CREATED_CARD_CODE = 201;
+
 const { Card } = require('../models/card');
 const { ValidationError } = require('../errors/ValidationError');
 const { NotFoundError } = require('../errors/NotFoundError');
@@ -10,7 +12,7 @@ const createCard = async (req, res, next) => {
 
     const card = await Card.create({ name, link, owner });
 
-    res.send(card);
+    res.status(CREATED_CARD_CODE).send(card);
   } catch (err) {
     if (err.name === 'ValidationError') {
       next(new ValidationError('Переданы некорректные данные'));
