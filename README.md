@@ -19,5 +19,4 @@ https://github.com/Denchik730/express-mesto-gha
 
 `npm run start` — запускает сервер   
 `npm run dev` — запускает сервер с hot-reload
-`npm run lint` — проверяет ошибки в проекте линтером eslint
 
