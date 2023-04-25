@@ -17,8 +17,6 @@ const userSchema = new mongoose.Schema({
   avatar: {
     type: String,
     required: [true, 'Поле \'avatar\' должно быть заполнено'],
-<<<<<<< HEAD
-=======
   },
   email: {
     type: String,
@@ -31,8 +29,6 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     required: true,
-    minlength: 8,
->>>>>>> main
   },
 }, {
   versionKey: false,

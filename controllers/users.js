@@ -91,11 +91,8 @@ const updateAvatar = async (req, res, next) => {
   } catch (err) {
     if (err.name === 'ValidationError') {
       next(new ValidationError(err.message));
-<<<<<<< HEAD
-=======
     } else if (err.name === 'CastError') {
       next(new CastError('Переданы некорректные данные'));
->>>>>>> main
     } else {
       next(err);
     }
