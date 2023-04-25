@@ -1,24 +1,45 @@
 const CREATED_USER_CODE = 201;
 
+const bcrypt = require('bcryptjs');
+
 const { User } = require('../models/user');
 const { ValidationError } = require('../errors/ValidationError');
 const { NotFoundError } = require('../errors/NotFoundError');
 const { CastError } = require('../errors/CastError');
 
 const createUser = async (req, res, next) => {
-  try {
-    const { name, about, avatar } = req.body;
+  const {
+    name,
+    about,
+    avatar,
+    email,
+    password,
+  } = req.body;
 
-    const user = await User.create({ name, about, avatar });
+  bcrypt.hash(password, 10)
+    .then((hash) => User.create({
+      email,
+      password: hash,
+      name,
+      about,
+      avatar,
+    }))
+    .then((user) => res.send(user))
+    .catch((err) => res.status(400).send(err));
 
-    res.status(CREATED_USER_CODE).send(user);
-  } catch (err) {
-    if (err.name === 'ValidationError') {
-      next(new ValidationError(err.message));
-    } else {
-      next(err);
-    }
-  }
+  // try {
+  //   const { name, about, avatar } = req.body;
+
+  //   const user = await User.create({ name, about, avatar });
+
+  //   res.status(CREATED_USER_CODE).send(user);
+  // } catch (err) {
+  //   if (err.name === 'ValidationError') {
+  //     next(new ValidationError(err.message));
+  //   } else {
+  //     next(err);
+  //   }
+  // }
 };
 
 const getUsers = async (req, res, next) => {
