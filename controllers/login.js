@@ -2,6 +2,8 @@ const jwt = require('jsonwebtoken');
 
 const { User } = require("../models/user");
 
+const { NODE_ENV, JWT_SECRET } = process.env;
+
 const login = (req, res) => {
   const { email, password } = req.body;
 
@@ -10,20 +12,20 @@ const login = (req, res) => {
 
       const token = jwt.sign(
         { _id: user._id },
-          'some-secret-key',
+        NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret',
           { expiresIn: '7d' },
          );
 
-      res.cookie('jwt', token, {
+      res.cookie('token', token, {
         maxAge: 3600000 * 24 * 7,
         httpOnly: true,
-      })
+      });
 
       res.send({ token });
     })
     .catch((err) => {
       res.status(401).send({ message: err.message });
-    })
+    });
 }
 
 module.exports = { login };
