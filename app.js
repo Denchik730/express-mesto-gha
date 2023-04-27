@@ -1,5 +1,4 @@
 require('dotenv').config();
-console.log(process.env.JWT_SECRET);
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
@@ -8,8 +7,8 @@ const routerUsers = require('./routes/users');
 const routerCard = require('./routes/cards');
 const errorHandler = require('./middlewares/errorHandler');
 const { NotFoundError } = require('./errors/NotFoundError');
-const login = require('./controllers/login');
-const createUser = require('./controllers/users');
+const { login } = require('./controllers/login');
+const { createUser } = require('./controllers/users');
 const auth = require('./middlewares/auth');
 
 const { PORT = 3000 } = process.env;

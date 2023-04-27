@@ -7,7 +7,7 @@ const { ValidationError } = require('../errors/ValidationError');
 const { NotFoundError } = require('../errors/NotFoundError');
 const { CastError } = require('../errors/CastError');
 
-const createUser = async (req, res, next) => {
+const createUser = (req, res, next) => {
   const {
     name,
     about,
@@ -26,20 +26,6 @@ const createUser = async (req, res, next) => {
     }))
     .then((user) => res.send(user))
     .catch((err) => res.status(400).send(err));
-
-  // try {
-  //   const { name, about, avatar } = req.body;
-
-  //   const user = await User.create({ name, about, avatar });
-
-  //   res.status(CREATED_USER_CODE).send(user);
-  // } catch (err) {
-  //   if (err.name === 'ValidationError') {
-  //     next(new ValidationError(err.message));
-  //   } else {
-  //     next(err);
-  //   }
-  // }
 };
 
 const getUsers = async (req, res, next) => {
