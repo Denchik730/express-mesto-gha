@@ -54,10 +54,10 @@ const createUser = (req, res, next) => {
     .then((user) => res.status(CREATED_USER_CODE).send(user))
     .catch((err) => {
       if (err.code === 11000) {
-        return next(new NotFoundError('email уже зареган'));
+        next(new NotFoundError('email уже зареган'));
+      } else {
+        next();
       }
-
-      return next();
     });
 };
 
@@ -68,7 +68,7 @@ const getCurrentUser = (req, res, next) => {
         next(new NotFoundError('Запрашиваемый пользователь не найден'));
       }
 
-      res.send(user);
+      return res.send(user);
     })
     .catch((err) => {
       if (err.name === 'CastError') {
@@ -92,7 +92,7 @@ const getUser = (req, res, next) => {
         next(new NotFoundError('Запрашиваемый пользователь не найден'));
       }
 
-      res.send(user);
+      return res.send(user);
     })
     .catch((err) => {
       if (err.name === 'CastError') {
@@ -115,7 +115,7 @@ const updateProfile = (req, res, next) => {
       next(new NotFoundError('Запрашиваемый пользователь не найден'));
     }
 
-    res.send(user);
+    return res.send(user);
   })
   .catch((err) => {
     if (err.name === 'ValidationError') {
@@ -128,7 +128,7 @@ const updateProfile = (req, res, next) => {
   });
 };
 
-const updateAvatar = async (req, res, next) => {
+const updateAvatar = (req, res, next) => {
   const { avatar } = req.body;
 
   User.findByIdAndUpdate(req.user._id, { avatar }, {
@@ -137,10 +137,10 @@ const updateAvatar = async (req, res, next) => {
   })
   .then((user) => {
     if (!user) {
-      throw new NotFoundError('Запрашиваемый пользователь не найден');
+      next(new NotFoundError('Запрашиваемый пользователь не найден'));
     }
 
-    res.send(user);
+    return res.send(user);
   })
   .catch((err) => {
     if (err.name === 'ValidationError') {
