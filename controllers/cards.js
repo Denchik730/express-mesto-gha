@@ -33,21 +33,46 @@ const getCards = async (req, res, next) => {
 };
 
 const deleteCard = async (req, res, next) => {
-  try {
-    const card = await Card.findByIdAndRemove(req.params.cardId);
-
-    if (!card) {
-      throw new NotFoundError('Запрашиваемая карточка не найдена');
-    }
-
-    res.send(card);
-  } catch (err) {
-    if (err.name === 'CastError') {
-      next(new CastError('Переданы некорректные данные'));
-    } else {
-      next(err);
-    }
+  const removeCard = () => {
+    Card.findByIdAndRemove(req.params.cardId)
+      .then((card) => res.send(card))
+      .catch(next);
   }
+
+  Card.findById(req.params.cardId)
+    .then((card) => {
+      if (!card) {
+        return Promise.reject(new NotFoundError('Запрашиваемая карточка не найдена'));
+      }
+
+      if (card.owner.toString() !== req.user._id) {
+        return Promise.reject(new NotFoundError('Невозможно удалить чужую карточку'));
+      }
+
+      return removeCard();
+    })
+    .catch(next);
+  // try {
+  //   const card = await Card.findByIdAndRemove(req.params.cardId);
+  //   console.log(card);
+  //   console.log(req.user);
+  //   console.log(card.owner.toString());
+  //   if (card.owner !== req.user._id) {
+  //     throw new NotFoundError('Не твоя карточка');
+  //   }
+
+  //   if (!card) {
+  //     throw new NotFoundError('Запрашиваемая карточка не найдена');
+  //   }
+
+  //   res.send(card);
+  // } catch (err) {
+  //   if (err.name === 'CastError') {
+  //     next(new CastError('Переданы некорректные данные'));
+  //   } else {
+  //     next(err);
+  //   }
+  // }
 };
 
 const likeCard = async (req, res, next) => {

@@ -55,6 +55,24 @@ const createUser = (req, res, next) => {
     .catch((err) => res.status(400).send(err));
 };
 
+const getCurrentUser = (req, res, next) => {
+  User.findById(req.user._id)
+    .then((user) => {
+      if (!user) {
+        next(new NotFoundError('Запрашиваемый пользователь не найден'));
+      }
+
+      res.send(user);
+    })
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        next(new CastError('Переданы некорректные данные'));
+      } else {
+        next(err);
+      }
+    })
+}
+
 const getUsers = async (req, res, next) => {
   try {
     const users = await User.find({});
@@ -140,4 +158,5 @@ module.exports = {
   updateAvatar,
   updateProfile,
   login,
+  getCurrentUser,
 };
