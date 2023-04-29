@@ -16,7 +16,6 @@ const login = (req, res, next) => {
 
   User.findUserByCredentials(email, password)
     .then((user) => {
-
       const token = jwt.sign(
         { _id: user._id },
         NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret',
@@ -31,7 +30,7 @@ const login = (req, res, next) => {
       res.send({ token });
     })
     .catch(next);
-}
+};
 
 const createUser = (req, res, next) => {
   const {
@@ -75,8 +74,8 @@ const getCurrentUser = (req, res, next) => {
       } else {
         next(err);
       }
-    })
-}
+    });
+};
 
 const getUsers = (req, res, next) => {
   User.find({})
@@ -108,15 +107,13 @@ const updateProfile = (req, res, next) => {
   User.findByIdAndUpdate(req.user._id, { name, about }, {
     new: true,
     runValidators: true,
-  })
-  .then((user) => {
+  }).then((user) => {
     if (!user) {
       next(new NotFoundError('Запрашиваемый пользователь не найден'));
     }
 
     return res.send(user);
-  })
-  .catch((err) => {
+  }).catch((err) => {
     if (err.name === 'ValidationError') {
       next(new ValidationError(err.message));
     } else if (err.name === 'CastError') {
@@ -133,15 +130,13 @@ const updateAvatar = (req, res, next) => {
   User.findByIdAndUpdate(req.user._id, { avatar }, {
     new: true,
     runValidators: true,
-  })
-  .then((user) => {
+  }).then((user) => {
     if (!user) {
       next(new NotFoundError('Запрашиваемый пользователь не найден'));
     }
 
     return res.send(user);
-  })
-  .catch((err) => {
+  }).catch((err) => {
     if (err.name === 'ValidationError') {
       next(new ValidationError(err.message));
     } else if (err.name === 'CastError') {

@@ -18,7 +18,7 @@ const createCard = (req, res, next) => {
       } else {
         next(err);
       }
-    })
+    });
 };
 
 const getCards = (req, res, next) => {
@@ -32,7 +32,7 @@ const deleteCard = (req, res, next) => {
     Card.findByIdAndRemove(req.params.cardId)
       .then((card) => res.send(card))
       .catch(next);
-  }
+  };
 
   Card.findById(req.params.cardId)
     .then((card) => {
@@ -54,15 +54,13 @@ const likeCard = (req, res, next) => {
     req.params.cardId,
     { $addToSet: { likes: req.user._id } },
     { new: true },
-  )
-  .then((card) => {
+  ).then((card) => {
     if (!card) {
       next(new NotFoundError('Запрашиваемая карточка не найдена'));
     }
 
     return res.send(card);
-  })
-  .catch((err) => {
+  }).catch((err) => {
     if (err.name === 'CastError') {
       next(new CastError('Переданы некорректные данные'));
     } else {
@@ -76,15 +74,13 @@ const dislikeCard = (req, res, next) => {
     req.params.cardId,
     { $pull: { likes: req.user._id } },
     { new: true },
-  )
-  .then((card) => {
+  ).then((card) => {
     if (!card) {
       next(new NotFoundError('Запрашиваемая карточка не найдена'));
     }
 
     return res.send(card);
-  })
-  .catch((err) => {
+  }).catch((err) => {
     if (err.name === 'CastError') {
       next(new CastError('Переданы некорректные данные'));
     } else {
