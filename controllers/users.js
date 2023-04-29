@@ -7,10 +7,11 @@ const { User } = require('../models/user');
 const { ValidationError } = require('../errors/ValidationError');
 const { NotFoundError } = require('../errors/NotFoundError');
 const { CastError } = require('../errors/CastError');
+const { ConflictError } = require('../errors/ConflictError');
 
 const { NODE_ENV, JWT_SECRET } = process.env;
 
-const login = (req, res) => {
+const login = (req, res, next) => {
   const { email, password } = req.body;
 
   User.findUserByCredentials(email, password)
@@ -29,9 +30,7 @@ const login = (req, res) => {
 
       res.send({ token });
     })
-    .catch((err) => {
-      res.status(401).send({ message: err.message });
-    });
+    .catch(next);
 }
 
 const createUser = (req, res, next) => {
@@ -54,7 +53,7 @@ const createUser = (req, res, next) => {
     .then((user) => res.status(CREATED_USER_CODE).send(user))
     .catch((err) => {
       if (err.code === 11000) {
-        next(new NotFoundError('email уже зареган'));
+        next(new ConflictError('Данный email уже зарегистрирован'));
       } else {
         next();
       }

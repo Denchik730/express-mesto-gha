@@ -4,6 +4,7 @@ const { Card } = require('../models/card');
 const { ValidationError } = require('../errors/ValidationError');
 const { NotFoundError } = require('../errors/NotFoundError');
 const { CastError } = require('../errors/CastError');
+const { ForbiddenError } = require('../errors/ForbiddenError');
 
 const createCard = (req, res, next) => {
   const { name, link } = req.body;
@@ -40,7 +41,7 @@ const deleteCard = (req, res, next) => {
       }
 
       if (card.owner.toString() !== req.user._id) {
-        next(new NotFoundError('Невозможно удалить чужую карточку'));
+        next(new ForbiddenError('Невозможно удалить чужую карточку'));
       }
 
       return removeCard();
