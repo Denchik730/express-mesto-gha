@@ -4,8 +4,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 
-const routerUsers = require('./routes/users');
-const routerCard = require('./routes/cards');
+const { routerUsers, routerCard } = require('./routes');
 const errorHandler = require('./middlewares/errorHandler');
 const { NotFoundError } = require('./errors/NotFoundError');
 const { login } = require('./controllers/users');

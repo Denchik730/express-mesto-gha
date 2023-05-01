@@ -115,7 +115,8 @@ const updateProfile = (req, res, next) => {
     return res.send(user);
   }).catch((err) => {
     if (err.name === 'ValidationError') {
-      next(new ValidationError(err.message));
+      const message = Object.values(err.errors).map((error) => error.message).join('; ');
+      next(new ValidationError(message));
     } else if (err.name === 'CastError') {
       next(new CastError('Переданы некорректные данные'));
     } else {
@@ -138,7 +139,8 @@ const updateAvatar = (req, res, next) => {
     return res.send(user);
   }).catch((err) => {
     if (err.name === 'ValidationError') {
-      next(new ValidationError(err.message));
+      const message = Object.values(err.errors).map((error) => error.message).join('; ');
+      next(new ValidationError(message));
     } else if (err.name === 'CastError') {
       next(new CastError('Переданы некорректные данные'));
     } else {
