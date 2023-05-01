@@ -53,6 +53,9 @@ const createUser = (req, res, next) => {
     .catch((err) => {
       if (err.code === 11000) {
         next(new ConflictError('Данный email уже зарегистрирован'));
+      } else if (err.name === 'ValidationError') {
+        const message = Object.values(err.errors).map((error) => error.message).join('; ');
+        next(new ValidationError(message));
       } else {
         next();
       }

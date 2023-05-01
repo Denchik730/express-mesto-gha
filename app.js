@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 
-const { routerUsers, routerCard } = require('./routes');
+const { routerUsers, routerCards } = require('./routes');
 const errorHandler = require('./middlewares/errorHandler');
 const { NotFoundError } = require('./errors/NotFoundError');
 const { login } = require('./controllers/users');
@@ -24,13 +24,14 @@ app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.post('/signin', login);
 app.post('/signup', createUser);
 
-app.use(auth);
+app.post('/signin', login);
 
-app.use('/users', routerUsers);
-app.use('/cards', routerCard);
+// app.use(auth);
+
+app.use('/users', auth, routerUsers);
+app.use('/cards', auth, routerCards);
 
 app.all('*', (req, res, next) => {
   next(new NotFoundError('Неверный адрес запроса'));
