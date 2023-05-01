@@ -75,7 +75,7 @@ const getCurrentUser = (req, res, next) => {
   User.findById(req.user._id)
     .then((user) => {
       if (!user) {
-        next(new NotFoundError('Запрашиваемый пользователь не найден'));
+        return next(new NotFoundError('Запрашиваемый пользователь не найден'));
       }
 
       return res.send(user);
@@ -99,7 +99,7 @@ const getUser = (req, res, next) => {
   User.findById(req.params.userId)
     .then((user) => {
       if (!user) {
-        next(new NotFoundError('Запрашиваемый пользователь не найден'));
+        return next(new NotFoundError('Запрашиваемый пользователь не найден'));
       }
 
       return res.send(user);
@@ -121,7 +121,7 @@ const updateProfile = (req, res, next) => {
     runValidators: true,
   }).then((user) => {
     if (!user) {
-      next(new NotFoundError('Запрашиваемый пользователь не найден'));
+      return next(new NotFoundError('Запрашиваемый пользователь не найден'));
     }
 
     return res.send(user);
@@ -145,7 +145,7 @@ const updateAvatar = (req, res, next) => {
     runValidators: true,
   }).then((user) => {
     if (!user) {
-      next(new NotFoundError('Запрашиваемый пользователь не найден'));
+      return next(new NotFoundError('Запрашиваемый пользователь не найден'));
     }
 
     return res.send(user);
