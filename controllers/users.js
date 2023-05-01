@@ -41,6 +41,15 @@ const createUser = (req, res, next) => {
     password,
   } = req.body;
 
+  // const createUser = (hash) => User
+  //   .create({
+  //     email,
+  //     password: hash,
+  //     name,
+  //     about,
+  //     avatar,
+  //   });
+
   bcrypt.hash(password, 10)
     .then((hash) => User.create({
       email,
@@ -49,7 +58,16 @@ const createUser = (req, res, next) => {
       about,
       avatar,
     }))
-    .then((user) => res.status(CREATED_USER_CODE).send(user))
+    .then((user) => {
+      res
+        .status(CREATED_USER_CODE)
+        .send({
+          email: user.email,
+          name: user.name,
+          about: user.about,
+          avatar: user.avatar,
+        });
+    })
     .catch((err) => {
       if (err.code === 11000) {
         next(new ConflictError('Данный email уже зарегистрирован'));
