@@ -11,6 +11,7 @@ const { NotFoundError } = require('./errors/NotFoundError');
 const { login } = require('./controllers/users');
 const { createUser } = require('./controllers/users');
 const auth = require('./middlewares/auth');
+const { reg } = require('./utils/constants');
 
 const { PORT = 3000 } = process.env;
 
@@ -35,7 +36,7 @@ app.post(
       about: Joi.string().min(2).max(30),
       avatar: Joi
         .string()
-        .pattern(/(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/),
+        .pattern(reg),
     }),
   }),
   createUser,

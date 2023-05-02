@@ -3,6 +3,7 @@ const validator = require('validator');
 const bcrypt = require('bcryptjs');
 
 const { AuthError } = require('../errors/AuthError');
+const { reg } = require('../utils/constants');
 
 const userSchema = new mongoose.Schema({
   email: {
@@ -33,7 +34,7 @@ const userSchema = new mongoose.Schema({
   avatar: {
     type: String,
     validate: {
-      validator: (v) => /^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_+.~#?&/=]*)$/.test(v),
+      validator: (v) => reg.test(v),
       message: (props) => `${props.value} не валидная ссылка`,
     },
     default: 'https://pictures.s3.yandex.net/resources/jacques-cousteau_1604399756.png',

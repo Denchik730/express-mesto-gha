@@ -8,6 +8,7 @@ const {
   updateProfile,
   getCurrentUser,
 } = require('../controllers/users');
+const { reg } = require('../utils/constants');
 
 routerUsers.get('/', getUsers);
 
@@ -40,7 +41,7 @@ routerUsers.patch(
     body: Joi.object().keys({
       avatar: Joi
         .string()
-        .pattern(/(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/),
+        .pattern(reg),
     }),
   }),
   updateAvatar,
