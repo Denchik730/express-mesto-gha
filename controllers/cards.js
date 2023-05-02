@@ -3,7 +3,6 @@ const CREATED_CARD_CODE = 201;
 const { Card } = require('../models/card');
 const { ValidationError } = require('../errors/ValidationError');
 const { NotFoundError } = require('../errors/NotFoundError');
-const { CastError } = require('../errors/CastError');
 const { ForbiddenError } = require('../errors/ForbiddenError');
 
 const createCard = (req, res, next) => {
@@ -63,7 +62,7 @@ const likeCard = (req, res, next) => {
     return res.send(card);
   }).catch((err) => {
     if (err.name === 'CastError') {
-      next(new CastError('Переданы некорректные данные'));
+      next(new ValidationError('Переданы некорректные данные'));
     } else {
       next(err);
     }
@@ -83,7 +82,7 @@ const dislikeCard = (req, res, next) => {
     return res.send(card);
   }).catch((err) => {
     if (err.name === 'CastError') {
-      next(new CastError('Переданы некорректные данные'));
+      next(new ValidationError('Переданы некорректные данные'));
     } else {
       next(err);
     }

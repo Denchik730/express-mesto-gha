@@ -57,7 +57,7 @@ app.post(
 app.use('/users', auth, routerUsers);
 app.use('/cards', auth, routerCards);
 
-app.all('*', (req, res, next) => {
+app.all('*', auth, (req, res, next) => {
   next(new NotFoundError('Неверный адрес запроса'));
 });
 

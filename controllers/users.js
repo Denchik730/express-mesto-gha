@@ -6,7 +6,6 @@ const bcrypt = require('bcryptjs');
 const { User } = require('../models/user');
 const { ValidationError } = require('../errors/ValidationError');
 const { NotFoundError } = require('../errors/NotFoundError');
-const { CastError } = require('../errors/CastError');
 const { ConflictError } = require('../errors/ConflictError');
 
 const { NODE_ENV, JWT_SECRET } = process.env;
@@ -66,7 +65,7 @@ const createUser = (req, res, next) => {
         const message = Object.values(err.errors).map((error) => error.message).join('; ');
         next(new ValidationError(message));
       } else {
-        next();
+        next(err);
       }
     });
 };
@@ -82,7 +81,7 @@ const getCurrentUser = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        next(new CastError('Переданы некорректные данные'));
+        next(new ValidationError('Переданы некорректные данные'));
       } else {
         next(err);
       }
@@ -106,7 +105,7 @@ const getUser = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        next(new CastError('Переданы некорректные данные'));
+        next(new ValidationError('Переданы некорректные данные'));
       } else {
         next(err);
       }
@@ -130,7 +129,7 @@ const updateProfile = (req, res, next) => {
       const message = Object.values(err.errors).map((error) => error.message).join('; ');
       next(new ValidationError(message));
     } else if (err.name === 'CastError') {
-      next(new CastError('Переданы некорректные данные'));
+      next(new ValidationError('Переданы некорректные данные'));
     } else {
       next(err);
     }
@@ -154,7 +153,7 @@ const updateAvatar = (req, res, next) => {
       const message = Object.values(err.errors).map((error) => error.message).join('; ');
       next(new ValidationError(message));
     } else if (err.name === 'CastError') {
-      next(new CastError('Переданы некорректные данные'));
+      next(new ValidationError('Переданы некорректные данные'));
     } else {
       next(err);
     }
